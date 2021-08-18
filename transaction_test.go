@@ -12,7 +12,6 @@ import (
 )
 
 func Test_sendTx(t *testing.T) {
-	//client, err := ethclient.Dial("https://testnet-web3.wolot.io")
 	client, err := ethclient.Dial("http://192.168.10.106:8545")
 	if err != nil {
 		panic(err)
@@ -53,15 +52,48 @@ func Test_sendTx(t *testing.T) {
 	}
 }
 
-func Test_getNonce(t *testing.T) {
-	//client, err := ethclient.Dial("https://testnet-web3.wolot.io")
-	client, err := ethclient.Dial("http://192.168.10.106:8545")
-	if err != nil {
-		panic(err)
-	}
-	nonce, err := client.PendingNonceAt(context.Background(), common.HexToAddress("0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F"))
+func TestETHCli_SendOfflineTransaction(t *testing.T) {
+	cli := New("http://192.168.10.106:8545")
+	to := common.HexToAddress("0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F")
+
+	tx := cli.BuildTx(2, ToWei(big.NewInt(100)), 21000, &to, ToWei(big.NewInt(1*1e8)), nil)
+	signedtx, err := cli.SignTx(tx, big.NewInt(386), "e8ca4b92b646487bf6be852e35dbe96496386a5541f16a7b33b84c96b5c2d0b0")
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(nonce)
+	hash := signedtx.Hash()
+	fmt.Println("hash=", hash.Hex())
+	if err := cli.SendTx(context.Background(), signedtx); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestETHCli_SendMondoTx(t *testing.T) {
+	cli := New("http://192.168.10.106:8545")
+	to := "0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F"
+	hash, err := cli.SendMondoTx("e8ca4b92b646487bf6be852e35dbe96496386a5541f16a7b33b84c96b5c2d0b0",
+		&to,
+		ToWei(big.NewInt(1)).String(), //0.00000001 OLO
+		"",
+		ToWei(big.NewInt(100)).String(), // 0.000001 OLO
+		21000)
+	if err != nil {
+		t.Fatal(err, hash)
+	}
+	fmt.Println("hash=", hash)
+}
+
+func TestETHCli_SendMondoTxWithoutFee(t *testing.T) {
+	cli := New("http://192.168.10.106:8545")
+	to := "0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F"
+	hash, err := cli.SendMondoTx("e8ca4b92b646487bf6be852e35dbe96496386a5541f16a7b33b84c96b5c2d0b0",
+		&to,
+		ToWei(big.NewInt(1)).String(), //0.00000001 OLO
+		"",
+		"",
+		0)
+	if err != nil {
+		t.Fatal(err, hash)
+	}
+	fmt.Println("hash=", hash)
 }

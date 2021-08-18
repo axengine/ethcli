@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	"math/big"
 	"strings"
 )
 
@@ -39,4 +40,12 @@ func BytesToHexWith0x(bz []byte) string {
 
 func ValidAddress(address string) bool {
 	return common.IsHexAddress(address)
+}
+
+func ToWei(v *big.Int) *big.Int {
+	return new(big.Int).Mul(v, big.NewInt(1e10))
+}
+
+func ToEther(v *big.Int) *big.Int {
+	return new(big.Int).Div(v, big.NewInt(1e10))
 }

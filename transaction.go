@@ -60,9 +60,9 @@ func (cli *ETHCli) SendTx(ctx context.Context, signedTx *types.Transaction) erro
 // SendMondoTx 高级别的发送Mondo交易
 // key 私钥，无0x开头的hex格式
 // to 地址，为空或全0时为部署合约
-// amount 金额，十进制字符串，整数，小数位8;(1=0.00000001 OLO)
+// amount 金额，十进制字符串，整数，小数位18，第9-18位小数将被忽略
 // payload 合约负载，0x开头、非0x开头的hex格式
-// gasPrice 可选，为0或不填时从链上时建议price;(1=0.00000001 OLO)
+// gasPrice 可选，金额，十进制字符串，整数，小数位18，第9-18位小数将被忽略;为0或不填时从链上时建议price
 // gasLimit 可选，为0时实时估算
 func (cli *ETHCli) SendMondoTx(key string, to *string, amount string, payload string, gasPrice string, gasLimit uint64) (string, error) {
 	priKey, err := crypto.HexToECDSA(key)
@@ -88,24 +88,20 @@ func (cli *ETHCli) SendMondoTx(key string, to *string, amount string, payload st
 		value = big.NewInt(0)
 	}
 
-	price, ok := new(big.Int).SetString(gasPrice, 10)
-	if !ok {
-		price = new(big.Int)
-	}
-	if price.Cmp(big.NewInt(0)) == 0 {
+	data := HexToBytes(payload)
+
+	price, _ := new(big.Int).SetString(gasPrice, 10)
+	if price == nil || price.Cmp(big.NewInt(0)) == 0 {
 		price, err = cli.SuggestGasPrice(context.Background())
 		if err != nil {
 			return "", err
 		}
 	}
 
-	data := HexToBytes(payload)
-
 	if gasLimit == 0 {
 		gasLimit, err = cli.EstimateGas(context.Background(), ethereum.CallMsg{
 			From:     from,
 			To:       toAddr,
-			Gas:      100000000,
 			GasPrice: price,
 			Value:    value,
 			Data:     data,
