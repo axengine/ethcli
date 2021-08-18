@@ -2,7 +2,7 @@ package ethcli
 
 import (
 	"context"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"ethcli/ethclient"
 	"log"
 	"math/big"
 	"sync/atomic"
