@@ -1,9 +1,12 @@
 # ethcli
+使用类ethereum的 golang client(sdk)，包括以下功能：
 - 包装go-ethereum ethclient.Client，提供内置的web3 JSON RPC方法
 - 封装离线签名交易接口（`BuildTx`、`SignTx`、`SendTx`），封装高级别的`SendMondoTx`接口
 - 封装ORC20/ERC20接口
 - 封装ORC721/ERC721接口，封装自定义ORC721/ERC721 `mint`接口
 - 提供地址生成`GenKey`、校验`ValidAddress`、资产精度转换方法`ToWei`,`ToEther`，十六进制数据转换`HexToBytes` `BytesToHex` `BytesToHexWith0x`方法
+
+方法的使用参考test文件。
 
 ## 数据差异
 - 无叔块
