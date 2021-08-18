@@ -9,7 +9,7 @@ import (
 )
 
 func TestETHCli_SendOfflineTransaction(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	to := common.HexToAddress(exampleToAddress)
 
 	nonce, err := cli.PendingNonceAt(context.Background(), common.HexToAddress(exampleFromAddress))
@@ -35,7 +35,7 @@ func TestETHCli_SendOfflineTransaction(t *testing.T) {
 }
 
 func TestETHCli_SendMondoTx(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	to := exampleToAddress
 	hash, err := cli.SendMondoTx(exampleFromKey,
 		&to,
@@ -50,7 +50,7 @@ func TestETHCli_SendMondoTx(t *testing.T) {
 }
 
 func TestETHCli_SendMondoTxWithoutFee(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	to := exampleToAddress
 	hash, err := cli.SendMondoTx(exampleFromKey,
 		&to,

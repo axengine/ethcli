@@ -10,7 +10,6 @@
 - Mondo只有statedb，和区块数据
 - 无receipts tree，交易回执hash与交易hash相同
 - 区块hash：区块浏览器中区块hash无0x前缀
-- 订阅类：官方暂未支持
 
 ## ORC721 相关方法说明
 - 实现`openzeppelin-contract/contracts/token/ERC721` 和 `openzeppelin-contract/contracts/token/ERC721/extensions` 相关接口

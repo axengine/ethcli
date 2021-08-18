@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	exampleRawurl      = "http://192.168.10.106:8545"
+	exampleRawHTTPUrl  = "http://192.168.10.106:8545"
+	exampleRawWSUrl    = "ws://192.168.10.106:8546"
 	exampleChainId     = int64(386)
 	exampleERC20Token  = "0x67EbBA731DCd5b763F5699650920a637eDbBEb93"
 	exampleFromAddress = "0xED62EcAa9f0A43a92eA8ad08F199DF88Fc582F44"
@@ -24,7 +25,7 @@ var (
 )
 
 func Test_ChainID(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.ChainID(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -33,7 +34,7 @@ func Test_ChainID(t *testing.T) {
 }
 
 func Test_BlockByHash(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.BlockByHash(context.Background(), common.HexToHash("5FA8D136A49551A82F7DE7BB41C9B3EA58B3B8B468CC7E12DE811A080D0B8400"))
 	if err != nil {
 		t.Fatal(err)
@@ -42,7 +43,7 @@ func Test_BlockByHash(t *testing.T) {
 }
 
 func Test_BlockByNumber(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.BlockByNumber(context.Background(), big.NewInt(9867045))
 	if err != nil {
 		t.Fatal(err)
@@ -51,7 +52,7 @@ func Test_BlockByNumber(t *testing.T) {
 }
 
 func Test_BlockNumber(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.BlockNumber(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -60,7 +61,7 @@ func Test_BlockNumber(t *testing.T) {
 }
 
 func Test_HeaderByHash(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.HeaderByHash(context.Background(), common.HexToHash("5FA8D136A49551A82F7DE7BB41C9B3EA58B3B8B468CC7E12DE811A080D0B8400"))
 	if err != nil {
 		t.Fatal(err)
@@ -69,7 +70,7 @@ func Test_HeaderByHash(t *testing.T) {
 }
 
 func Test_HeaderByNumber(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.HeaderByNumber(context.Background(), big.NewInt(9867045))
 	if err != nil {
 		t.Fatal(err)
@@ -78,7 +79,7 @@ func Test_HeaderByNumber(t *testing.T) {
 }
 
 func Test_TransactionByHash(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, pending, err := cli.TransactionByHash(context.Background(), common.HexToHash("0x0f195566d383b3ee9174f0ea529bc604cb3e2d10bce8326c0a7eb05d2d347708"))
 	if err != nil {
 		t.Fatal(err)
@@ -88,7 +89,7 @@ func Test_TransactionByHash(t *testing.T) {
 }
 
 func Test_TransactionCount(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.TransactionCount(context.Background(), common.HexToHash("B725733BEB341B05E6C6E277CD20A158F8678CBC04C0925F33CA9104979B8EF8"))
 	if err != nil {
 		t.Fatal(err)
@@ -97,7 +98,7 @@ func Test_TransactionCount(t *testing.T) {
 }
 
 func Test_TransactionInBlock(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.TransactionInBlock(context.Background(), common.HexToHash("B725733BEB341B05E6C6E277CD20A158F8678CBC04C0925F33CA9104979B8EF8"), 0)
 	if err != nil {
 		t.Fatal(err)
@@ -106,7 +107,7 @@ func Test_TransactionInBlock(t *testing.T) {
 }
 
 func Test_TransactionReceipt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.TransactionReceipt(context.Background(), common.HexToHash("0xb3cd375f353433709221b78f58dcd8d474bc1176adf40cb1785021857f176c12"))
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +117,7 @@ func Test_TransactionReceipt(t *testing.T) {
 
 // unsupported method
 func Test_SyncProgress(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.SyncProgress(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -126,7 +127,7 @@ func Test_SyncProgress(t *testing.T) {
 
 // notifications not supported
 func Test_SubscribeNewHead(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawWSUrl)
 
 	ch := make(chan *types.Header, 1)
 
@@ -145,7 +146,7 @@ func Test_SubscribeNewHead(t *testing.T) {
 }
 
 func Test_NetworkID(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	networkId, err := cli.NetworkID(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -154,7 +155,7 @@ func Test_NetworkID(t *testing.T) {
 }
 
 func Test_BalanceAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.BalanceAt(context.Background(), common.HexToAddress(exampleFromAddress), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -163,7 +164,7 @@ func Test_BalanceAt(t *testing.T) {
 }
 
 func Test_StorageAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.StorageAt(context.Background(), common.HexToAddress(exampleFromAddress), common.HexToHash(""), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -172,7 +173,7 @@ func Test_StorageAt(t *testing.T) {
 }
 
 func Test_CodeAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.CodeAt(context.Background(), common.HexToAddress(exampleERC20Token), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -181,7 +182,7 @@ func Test_CodeAt(t *testing.T) {
 }
 
 func Test_NonceAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.NonceAt(context.Background(), common.HexToAddress(exampleFromAddress), big.NewInt(9866995))
 	if err != nil {
 		t.Fatal(err)
@@ -190,12 +191,12 @@ func Test_NonceAt(t *testing.T) {
 }
 
 func Test_FilterLogs(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.FilterLogs(context.Background(), ethereum.FilterQuery{
 		BlockHash: nil,
-		FromBlock: nil,
-		ToBlock:   nil,
-		Addresses: nil,
+		FromBlock: big.NewInt(9867425),
+		ToBlock:   big.NewInt(9867427),
+		Addresses: []common.Address{common.HexToAddress("0x67EbBA731DCd5b763F5699650920a637eDbBEb93")},
 		Topics:    nil,
 	})
 	if err != nil {
@@ -205,13 +206,13 @@ func Test_FilterLogs(t *testing.T) {
 }
 
 func Test_SubscribeFilterLogs(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawWSUrl)
 	ch := make(chan types.Log)
 	sub, err := cli.SubscribeFilterLogs(context.Background(), ethereum.FilterQuery{
 		BlockHash: nil,
 		FromBlock: nil,
 		ToBlock:   nil,
-		Addresses: nil,
+		Addresses: []common.Address{common.HexToAddress("0x67EbBA731DCd5b763F5699650920a637eDbBEb93")},
 		Topics:    nil,
 	}, ch)
 	if err != nil {
@@ -228,7 +229,7 @@ func Test_SubscribeFilterLogs(t *testing.T) {
 }
 
 func Test_PendingBalanceAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.PendingBalanceAt(context.Background(), common.HexToAddress(exampleFromAddress))
 	if err != nil {
 		t.Fatal(err)
@@ -237,7 +238,7 @@ func Test_PendingBalanceAt(t *testing.T) {
 }
 
 func Test_PendingStorageAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.PendingStorageAt(context.Background(), common.HexToAddress(exampleFromAddress), common.HexToHash(""))
 	if err != nil {
 		t.Fatal(err)
@@ -246,7 +247,7 @@ func Test_PendingStorageAt(t *testing.T) {
 }
 
 func Test_PendingNonceAt(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.PendingNonceAt(context.Background(), common.HexToAddress(exampleFromAddress))
 	if err != nil {
 		t.Fatal(err)
@@ -255,7 +256,7 @@ func Test_PendingNonceAt(t *testing.T) {
 }
 
 func Test_PendingTransactionCount(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	result, err := cli.PendingTransactionCount(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -264,7 +265,7 @@ func Test_PendingTransactionCount(t *testing.T) {
 }
 
 func Test_CallContract(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 
 	contract := common.HexToAddress(exampleERC20Token)
 
@@ -286,7 +287,7 @@ func Test_CallContract(t *testing.T) {
 }
 
 func Test_PendingCallContract(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 
 	contract := common.HexToAddress(exampleERC20Token)
 
@@ -308,7 +309,7 @@ func Test_PendingCallContract(t *testing.T) {
 }
 
 func Test_SuggestGasPrice(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 
 	result, err := cli.SuggestGasPrice(context.Background())
 	if err != nil {
@@ -318,7 +319,7 @@ func Test_SuggestGasPrice(t *testing.T) {
 }
 
 func Test_EstimateGas(t *testing.T) {
-	cli := New(exampleRawurl)
+	cli := New(exampleRawHTTPUrl)
 	contract := common.HexToAddress(exampleToAddress)
 	result, err := cli.EstimateGas(context.Background(),
 		ethereum.CallMsg{
