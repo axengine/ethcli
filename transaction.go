@@ -31,16 +31,22 @@ func (cli *ETHCli) BuildTx(nonce uint64, gasPrice *big.Int,
 
 // SignTx 交易签名
 // tx 待签名交易
-// chainID 链id，Mondo(devnet:386 testnet:8724 mainnet:8723)
 // key 私钥，无0x开头的hex格式
 // 返回已签名tx，tx.Hash返回交易hash
-func (cli *ETHCli) SignTx(tx *types.Transaction, chainID *big.Int, key string) (*types.Transaction, error) {
-	priKey, _ := crypto.HexToECDSA(key)
-	return cli.signTx(tx, chainID, priKey)
+func (cli *ETHCli) SignTx(tx *types.Transaction, key string) (*types.Transaction, error) {
+	priKey, err := crypto.HexToECDSA(key)
+	if err != nil {
+		return nil, err
+	}
+	chainId, err := cli.chainID()
+	if err != nil {
+		return nil, err
+	}
+	return cli.signTx(tx, chainId, priKey)
 }
 
-func (cli *ETHCli) signTx(tx *types.Transaction, chainID *big.Int, key *ecdsa.PrivateKey) (*types.Transaction, error) {
-	signer := types.NewEIP155Signer(chainID)
+func (cli *ETHCli) signTx(tx *types.Transaction, chainId *big.Int, key *ecdsa.PrivateKey) (*types.Transaction, error) {
+	signer := types.NewEIP155Signer(chainId)
 	signature, err := crypto.Sign(signer.Hash(tx).Bytes(), key)
 	if err != nil {
 		return tx, err
@@ -112,7 +118,8 @@ func (cli *ETHCli) SendMondoTx(key string, to *string, amount string, payload st
 	}
 
 	tx := cli.BuildTx(nonce, price, gasLimit, toAddr, value, data)
-	signedTx, err := cli.signTx(tx, cli.chainID(), priKey)
+
+	signedTx, err := cli.SignTx(tx, key)
 	if err != nil {
 		return "", err
 	}

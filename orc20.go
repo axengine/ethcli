@@ -132,7 +132,7 @@ func (cli *ETHCli) ORC20BalanceOf(token string, address string) (*big.Int, error
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC20Transfer(key, token, to, value string) (string, error) {
+func (cli *ETHCli) ORC20Transfer(token, key, to, value string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return "", err
@@ -170,7 +170,7 @@ func (cli *ETHCli) ORC20Allowance(token, owner, spender string) (*big.Int, error
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC20TransferFrom(key, token, from, to, value string) (string, error) {
+func (cli *ETHCli) ORC20TransferFrom(token, key, from, to, value string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return "", err
@@ -184,7 +184,7 @@ func (cli *ETHCli) ORC20TransferFrom(key, token, from, to, value string) (string
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC20Approve(key, token, spender, value string) (string, error) {
+func (cli *ETHCli) ORC20Approve(token, key, spender, value string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return "", err

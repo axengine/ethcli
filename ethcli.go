@@ -3,7 +3,6 @@ package ethcli
 import (
 	"context"
 	"ethcli/ethclient"
-	"log"
 	"math/big"
 	"sync/atomic"
 )
@@ -14,28 +13,26 @@ type ETHCli struct {
 	_chainID atomic.Value
 }
 
-func New(rawurl string) *ETHCli {
+func New(rawurl string) (*ETHCli, error) {
 	client, err := ethclient.Dial(rawurl)
 	if err != nil {
-		log.Printf("New::Dial %v", err)
-		return nil
+		return nil, err
 	}
 	return &ETHCli{
 		Client: client,
-	}
+	}, nil
 }
 
-func (cli *ETHCli) chainID() *big.Int {
+func (cli *ETHCli) chainID() (*big.Int, error) {
 	chainID := cli._chainID.Load()
 	if chainID != nil {
-		return chainID.(*big.Int)
+		return chainID.(*big.Int), nil
 	}
 
 	id, err := cli.ChainID(context.Background())
 	if err != nil {
-		log.Printf("chainID::ChainID %v", err)
-		return nil
+		return nil, err
 	}
 	cli._chainID.Store(id)
-	return id
+	return id, nil
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func TestETHCli_SendOfflineTransaction(t *testing.T) {
-	cli := New(exampleRawHTTPUrl)
+	cli, _ := New(exampleRawHTTPUrl)
 	to := common.HexToAddress(exampleToAddress)
 
 	nonce, err := cli.PendingNonceAt(context.Background(), common.HexToAddress(exampleFromAddress))
@@ -23,7 +23,7 @@ func TestETHCli_SendOfflineTransaction(t *testing.T) {
 		&to,
 		ToWei(big.NewInt(11*1e7)), // 1.1 OLO
 		nil)
-	signedtx, err := cli.SignTx(tx, big.NewInt(exampleChainId), exampleFromKey)
+	signedtx, err := cli.SignTx(tx, exampleFromKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +35,7 @@ func TestETHCli_SendOfflineTransaction(t *testing.T) {
 }
 
 func TestETHCli_SendMondoTx(t *testing.T) {
-	cli := New(exampleRawHTTPUrl)
+	cli, _ := New(exampleRawHTTPUrl)
 	to := exampleToAddress
 	hash, err := cli.SendMondoTx(exampleFromKey,
 		&to,
@@ -50,7 +50,7 @@ func TestETHCli_SendMondoTx(t *testing.T) {
 }
 
 func TestETHCli_SendMondoTxWithoutFee(t *testing.T) {
-	cli := New(exampleRawHTTPUrl)
+	cli, _ := New(exampleRawHTTPUrl)
 	to := exampleToAddress
 	hash, err := cli.SendMondoTx(exampleFromKey,
 		&to,
