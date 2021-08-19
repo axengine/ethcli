@@ -66,7 +66,7 @@ func (cli *ETHCli) ORC721TokenByIndex(token string, index *big.Int) (*big.Int, e
 	if err != nil {
 		return nil, err
 	}
-	data, _ := ins.Pack("tokenByIndex")
+	data, _ := ins.Pack("tokenByIndex", index)
 
 	contract := common.HexToAddress(token)
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{

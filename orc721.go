@@ -14,12 +14,12 @@ var (
 	customERC721Mint       = `[{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"string","name":"_tokenURI","type":"string"}],"name":"mint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"}]`
 )
 
-func (cli *ETHCli) ORC721BalanceOf(token string) (*big.Int, error) {
+func (cli *ETHCli) ORC721BalanceOf(token string, owner string) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return nil, err
 	}
-	data, _ := ins.Pack("balanceOf")
+	data, _ := ins.Pack("balanceOf", common.HexToAddress(owner))
 
 	contract := common.HexToAddress(token)
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
@@ -160,7 +160,7 @@ func (cli *ETHCli) ORC721Mint(token string, key string, to string) (string, erro
 	if err != nil {
 		return "", err
 	}
-	data, _ := ins.Pack("mint", common.HexToAddress(to), common.HexToAddress(to))
+	data, _ := ins.Pack("mint", common.HexToAddress(to))
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
@@ -169,6 +169,6 @@ func (cli *ETHCli) ORC721MintWithTokenURI(token string, key string, to string, u
 	if err != nil {
 		return "", err
 	}
-	data, _ := ins.Pack("mint", common.HexToAddress(to), common.HexToAddress(to), uri)
+	data, _ := ins.Pack("mint", common.HexToAddress(to), uri)
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
