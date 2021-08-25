@@ -1,4 +1,4 @@
-module ethcli
+module github.com/axengine/ethcli
 
 go 1.16
 

@@ -2,7 +2,7 @@ package ethcli
 
 import (
 	"context"
-	"ethcli/ethclient"
+	"github.com/axengine/ethcli/ethclient"
 	"math/big"
 	"sync/atomic"
 )
