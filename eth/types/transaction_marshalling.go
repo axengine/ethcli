@@ -270,6 +270,8 @@ func (t *Transaction) UnmarshalJSON(input []byte) error {
 	// Now set the inner transaction.
 	t.setDecoded(inner, 0)
 
+	t.setHash(dec.Hash)
+
 	// TODO: check hash here?
 	return nil
 }
