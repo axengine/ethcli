@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	exampleRawHTTPUrl  = "http://127.0.0.1:8545"
+	exampleRawHTTPUrl  = "https://ropsten.infura.io/v3/03d2548af36149abb66a54983ea238f9"
 	exampleRawWSUrl    = "ws://127.0.0.1:8546"
 	exampleERC20Token  = "0x67EbBA731DCd5b763F5699650920a637eDbBEb93"
 	exampleFromAddress = "0xED62EcAa9f0A43a92eA8ad08F199DF88Fc582F44"
@@ -44,7 +44,7 @@ func Test_BlockByHash(t *testing.T) {
 
 func Test_BlockByNumber(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.BlockByNumber(context.Background(), big.NewInt(9867045))
+	result, err := cli.BlockByNumber(context.Background(), big.NewInt(10934952))
 	if err != nil {
 		t.Fatal(err)
 	}
