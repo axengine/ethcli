@@ -3,17 +3,17 @@ package ethcli
 import (
 	"context"
 	"fmt"
+	"github.com/axengine/ethcli/eth/types"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
 	"math/big"
 	"strings"
 	"testing"
 )
 
 var (
-	exampleRawHTTPUrl  = "https://ropsten.infura.io/v3/03d2548af36149abb66a54983ea238f9"
+	exampleRawHTTPUrl  = "https://testnet-web3.wolot.io"
 	exampleRawWSUrl    = "ws://127.0.0.1:8546"
 	exampleERC20Token  = "0x67EbBA731DCd5b763F5699650920a637eDbBEb93"
 	exampleFromAddress = "0xED62EcAa9f0A43a92eA8ad08F199DF88Fc582F44"
@@ -44,11 +44,15 @@ func Test_BlockByHash(t *testing.T) {
 
 func Test_BlockByNumber(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.BlockByNumber(context.Background(), big.NewInt(10934952))
+	result, err := cli.BlockByNumber(context.Background(), big.NewInt(1111057))
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("%+v\n", result)
+
+	for _, v := range result.Transactions() {
+		fmt.Println(v.Hash().Hex())
+	}
 }
 
 func Test_BlockNumber(t *testing.T) {
