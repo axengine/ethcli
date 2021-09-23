@@ -1,8 +1,13 @@
 package ethcli
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 	"math/big"
+	"strings"
 	"testing"
 )
 
@@ -13,6 +18,51 @@ func TestETHCli_ORC721MintWithTokenURI(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Println(result)
+}
+
+func TestETHCli_ORC721DecodeTokenId(t *testing.T) {
+	decodeTokenId("0x7784f59caa8165c004cc6d4092c12ac1769568096c9b95909a9aa418db91a47b")
+}
+
+func decodeTokenId(hash string) (*big.Int, error) {
+	cli, _ := New(exampleRawHTTPUrl)
+	receipt, err := cli.TransactionReceipt(context.Background(), common.HexToHash(hash))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range receipt.Logs {
+		if len(v.Topics) == 0 {
+			return nil, errors.New("No Topic")
+		}
+		ins, _ := abi.JSON(strings.NewReader(`[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"}]`))
+		ev, err := ins.EventByID(v.Topics[0])
+		if err != nil {
+			continue
+		}
+		if ev.Name != "Transfer" {
+			continue
+		}
+
+		from := hashToAddress(v.Topics[1])
+		to := hashToAddress(v.Topics[2])
+		tokenId := hashToBigInt(v.Topics[3])
+		fmt.Printf("from:%s to:%s tokenId:%v\n", from.Hex(), to.Hex(), tokenId.Int64())
+		return tokenId, nil
+	}
+	return nil, errors.New("no ERC721 Transfer")
+}
+
+func hashToAddress(hx common.Hash) common.Address {
+	a := common.Address{}
+	a.SetBytes(hx.Bytes())
+	return a
+}
+
+func hashToBigInt(hx common.Hash) *big.Int {
+	v := new(big.Int)
+	v.SetBytes(hx.Bytes())
+	return v
 }
 
 func TestETHCli_ORC721Burn(t *testing.T) {
