@@ -76,7 +76,7 @@ func TestETHCli_ORC721Burn(t *testing.T) {
 
 func TestETHCli_ORC721BalanceOf(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721BalanceOf(exampleERC721Token, exampleFromAddress)
+	result, err := cli.ORC721BalanceOf("0x0c6F5145390028B7d09b513f47893b10C4c3a457", "0x69cB74cB86A05bd36d53Ccef1af3e90a6C66dD30", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestETHCli_ORC721BalanceOf(t *testing.T) {
 
 func TestETHCli_ORC721OwnerOf(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721OwnerOf(exampleERC721Token, big.NewInt(71))
+	result, err := cli.ORC721OwnerOf(exampleERC721Token, big.NewInt(71), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +94,7 @@ func TestETHCli_ORC721OwnerOf(t *testing.T) {
 
 func TestETHCli_ORC721TokenOfOwnerByIndex(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721TokenOfOwnerByIndex(exampleERC721Token, exampleFromAddress, big.NewInt(0))
+	result, err := cli.ORC721TokenOfOwnerByIndex(exampleERC721Token, exampleFromAddress, big.NewInt(0), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -103,7 +103,7 @@ func TestETHCli_ORC721TokenOfOwnerByIndex(t *testing.T) {
 
 func TestETHCli_ORC721TotalSupply(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721TotalSupply(exampleERC721Token)
+	result, err := cli.ORC721TotalSupply(exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,7 +112,7 @@ func TestETHCli_ORC721TotalSupply(t *testing.T) {
 
 func TestETHCli_ORC721TokenByIndex(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721TokenByIndex(exampleERC721Token, big.NewInt(0))
+	result, err := cli.ORC721TokenByIndex(exampleERC721Token, big.NewInt(0), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,7 +121,7 @@ func TestETHCli_ORC721TokenByIndex(t *testing.T) {
 
 func TestETHCli_ORC20Name(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC20Name(exampleERC721Token)
+	result, err := cli.ORC20Name(exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -130,7 +130,7 @@ func TestETHCli_ORC20Name(t *testing.T) {
 
 func TestETHCli_ORC721Symbol(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721Symbol(exampleERC721Token)
+	result, err := cli.ORC721Symbol(exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -139,7 +139,7 @@ func TestETHCli_ORC721Symbol(t *testing.T) {
 
 func TestETHCli_ORC721TokenURI(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721TokenURI(exampleERC721Token, big.NewInt(66))
+	result, err := cli.ORC721TokenURI(exampleERC721Token, big.NewInt(66), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -148,7 +148,7 @@ func TestETHCli_ORC721TokenURI(t *testing.T) {
 
 func TestETHCli_ORC721Paused(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721Paused(exampleERC721Token)
+	result, err := cli.ORC721Paused(exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -202,7 +202,7 @@ func TestETHCli_ORC721Approve(t *testing.T) {
 
 func TestETHCli_ORC721GetApproved(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721GetApproved(exampleERC721Token, big.NewInt(70))
+	result, err := cli.ORC721GetApproved(exampleERC721Token, big.NewInt(70), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -220,7 +220,7 @@ func TestETHCli_ORC721SetApprovalForAll(t *testing.T) {
 
 func TestETHCli_ORC721IsApprovedForAll(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ORC721IsApprovedForAll(exampleERC721Token, exampleFromAddress, exampleToAddress)
+	result, err := cli.ORC721IsApprovedForAll(exampleERC721Token, exampleFromAddress, exampleToAddress, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

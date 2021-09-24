@@ -5,6 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"math/big"
 	"strings"
 )
 
@@ -30,7 +31,7 @@ func (cli *ETHCli) ORC721Unpause(token string, key string) (string, error) {
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Paused(token string) (bool, error) {
+func (cli *ETHCli) ORC721Paused(token string, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
 	if err != nil {
 		return false, err
@@ -41,7 +42,7 @@ func (cli *ETHCli) ORC721Paused(token string) (bool, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return false, err
 	}

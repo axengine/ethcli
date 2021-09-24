@@ -13,7 +13,7 @@ var (
 	openzeppelinERC721EnumerableAbi = `[{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]`
 )
 
-func (cli *ETHCli) ORC721TokenOfOwnerByIndex(token string, owner string, index *big.Int) (*big.Int, error) {
+func (cli *ETHCli) ORC721TokenOfOwnerByIndex(token string, owner string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (cli *ETHCli) ORC721TokenOfOwnerByIndex(token string, owner string, index *
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (cli *ETHCli) ORC721TokenOfOwnerByIndex(token string, owner string, index *
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC721TotalSupply(token string) (*big.Int, error) {
+func (cli *ETHCli) ORC721TotalSupply(token string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (cli *ETHCli) ORC721TotalSupply(token string) (*big.Int, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (cli *ETHCli) ORC721TotalSupply(token string) (*big.Int, error) {
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC721TokenByIndex(token string, index *big.Int) (*big.Int, error) {
+func (cli *ETHCli) ORC721TokenByIndex(token string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func (cli *ETHCli) ORC721TokenByIndex(token string, index *big.Int) (*big.Int, e
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}

@@ -12,7 +12,7 @@ import (
 
 var openzeppelinERC20Abi = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_who","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]`
 
-func (cli *ETHCli) ORC20Name(token string) (string, error) {
+func (cli *ETHCli) ORC20Name(token string, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return "", err
@@ -23,7 +23,7 @@ func (cli *ETHCli) ORC20Name(token string) (string, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return "", err
 	}
@@ -36,7 +36,7 @@ func (cli *ETHCli) ORC20Name(token string) (string, error) {
 	return results[0].(string), nil
 }
 
-func (cli *ETHCli) ORC20Symbol(token string) (string, error) {
+func (cli *ETHCli) ORC20Symbol(token string, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return "", err
@@ -47,7 +47,7 @@ func (cli *ETHCli) ORC20Symbol(token string) (string, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return "", err
 	}
@@ -60,7 +60,7 @@ func (cli *ETHCli) ORC20Symbol(token string) (string, error) {
 	return results[0].(string), nil
 }
 
-func (cli *ETHCli) ORC20Decimals(token string) (uint8, error) {
+func (cli *ETHCli) ORC20Decimals(token string, blockNumber *big.Int) (uint8, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return 0, err
@@ -71,7 +71,7 @@ func (cli *ETHCli) ORC20Decimals(token string) (uint8, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return 0, err
 	}
@@ -84,7 +84,7 @@ func (cli *ETHCli) ORC20Decimals(token string) (uint8, error) {
 	return results[0].(uint8), nil
 }
 
-func (cli *ETHCli) ORC20TotalSupply(token string) (*big.Int, error) {
+func (cli *ETHCli) ORC20TotalSupply(token string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (cli *ETHCli) ORC20TotalSupply(token string) (*big.Int, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (cli *ETHCli) ORC20TotalSupply(token string) (*big.Int, error) {
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC20BalanceOf(token string, address string) (*big.Int, error) {
+func (cli *ETHCli) ORC20BalanceOf(token string, address string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (cli *ETHCli) ORC20BalanceOf(token string, address string) (*big.Int, error
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +146,7 @@ func (cli *ETHCli) ORC20Transfer(token, key, to, value string) (string, error) {
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC20Allowance(token, owner, spender string) (*big.Int, error) {
+func (cli *ETHCli) ORC20Allowance(token, owner, spender string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
 	if err != nil {
 		return nil, err
@@ -157,7 +157,7 @@ func (cli *ETHCli) ORC20Allowance(token, owner, spender string) (*big.Int, error
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}

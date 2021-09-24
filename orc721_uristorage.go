@@ -15,7 +15,7 @@ var (
 
 // ORC721TokenURI
 // for ERC721Metadata && ERC721URIStorage
-func (cli *ETHCli) ORC721TokenURI(token string, tokenId *big.Int) (string, error) {
+func (cli *ETHCli) ORC721TokenURI(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721URIStorageAbi))
 	if err != nil {
 		return "", err
@@ -26,7 +26,7 @@ func (cli *ETHCli) ORC721TokenURI(token string, tokenId *big.Int) (string, error
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return "", err
 	}

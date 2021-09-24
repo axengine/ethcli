@@ -15,7 +15,7 @@ var (
 	customERC721Exists     = `[{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"exists","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]`
 )
 
-func (cli *ETHCli) ORC721BalanceOf(token string, owner string) (*big.Int, error) {
+func (cli *ETHCli) ORC721BalanceOf(token string, owner string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (cli *ETHCli) ORC721BalanceOf(token string, owner string) (*big.Int, error)
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (cli *ETHCli) ORC721BalanceOf(token string, owner string) (*big.Int, error)
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC721OwnerOf(token string, tokenId *big.Int) (string, error) {
+func (cli *ETHCli) ORC721OwnerOf(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
@@ -50,7 +50,7 @@ func (cli *ETHCli) ORC721OwnerOf(token string, tokenId *big.Int) (string, error)
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return "", err
 	}
@@ -90,7 +90,7 @@ func (cli *ETHCli) ORC721Approve(token string, key, to string, tokenId *big.Int)
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721GetApproved(token string, tokenId *big.Int) (string, error) {
+func (cli *ETHCli) ORC721GetApproved(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
@@ -101,7 +101,7 @@ func (cli *ETHCli) ORC721GetApproved(token string, tokenId *big.Int) (string, er
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return "", err
 	}
@@ -123,7 +123,7 @@ func (cli *ETHCli) ORC721SetApprovalForAll(token string, key, operator string, a
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721IsApprovedForAll(token string, owner, operator string) (bool, error) {
+func (cli *ETHCli) ORC721IsApprovedForAll(token string, owner, operator string, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return false, err
@@ -134,7 +134,7 @@ func (cli *ETHCli) ORC721IsApprovedForAll(token string, owner, operator string) 
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return false, err
 	}
@@ -183,7 +183,7 @@ func (cli *ETHCli) ORC721MintWithTokenIdAndURI(token string, key string, to stri
 	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int) (bool, error) {
+func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721Exists))
 	if err != nil {
 		return false, err
@@ -194,7 +194,7 @@ func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int) (bool, error) {
 	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
-	}, nil)
+	}, blockNumber)
 	if err != nil {
 		return false, err
 	}
