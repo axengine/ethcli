@@ -49,3 +49,15 @@ func ToWei(v *big.Int) *big.Int {
 func ToEther(v *big.Int) *big.Int {
 	return new(big.Int).Div(v, big.NewInt(1e10))
 }
+
+func HashToAddress(hx common.Hash) common.Address {
+	a := common.Address{}
+	a.SetBytes(hx.Bytes())
+	return a
+}
+
+func HashToBigInt(hx common.Hash) *big.Int {
+	v := new(big.Int)
+	v.SetBytes(hx.Bytes())
+	return v
+}
