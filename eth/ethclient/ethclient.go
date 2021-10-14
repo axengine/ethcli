@@ -128,8 +128,13 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 	if head.TxHash == types.EmptyRootHash && len(body.Transactions) > 0 {
 		return nil, fmt.Errorf("server returned non-empty transaction list but block header indicates no transactions")
 	}
+	//if head.TxHash != types.EmptyRootHash && len(body.Transactions) == 0 {
+	//	return nil, fmt.Errorf("server returned empty transaction list but block header indicates transactions")
+	//}
+	// 目前链没有处理批量交易
 	if head.TxHash != types.EmptyRootHash && len(body.Transactions) == 0 {
-		return nil, fmt.Errorf("server returned empty transaction list but block header indicates transactions")
+		head.TxHash = types.EmptyRootHash
+		//return nil, fmt.Errorf("server returned empty transaction list but block header indicates transactions")
 	}
 	// Load uncles because they are not included in the block response.
 	var uncles []*types.Header
