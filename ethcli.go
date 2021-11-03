@@ -36,3 +36,12 @@ func (cli *ETHCli) chainID() (*big.Int, error) {
 	cli._chainID.Store(id)
 	return id, nil
 }
+
+// ID return chainId
+func (cli *ETHCli) ID() *big.Int {
+	id, err := cli.chainID()
+	if err != nil {
+		return big.NewInt(0)
+	}
+	return id
+}
