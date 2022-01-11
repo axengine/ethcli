@@ -226,3 +226,12 @@ func TestETHCli_ORC721IsApprovedForAll(t *testing.T) {
 	}
 	fmt.Println(result)
 }
+
+func TestETHCli_ORC721Supports(t *testing.T) {
+	cli, _ := New("https://bsc-dataseed1.binance.org:443")
+	result, err := cli.ORC721SupportsInterface("0x6D07C33ad397d73Cbd3fE5349eF223ed36FE5b28", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(result)
+}

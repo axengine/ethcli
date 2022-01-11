@@ -5,6 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"math/big"
 	"strings"
 )
@@ -15,6 +16,7 @@ var (
 	customERC721Mint                  = `[{"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"}]`
 	customERC721MintWithURI           = `[{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"string","name":"_tokenURI","type":"string"}],"name":"mint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"}]`
 	customERC721MintWithTokenIdAndURI = `[{"inputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"string","name":"_tokenURI","type":"string"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
+	customERC721SupportsInterface     = `[{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]`
 )
 
 func (cli *ETHCli) ORC721BalanceOf(token string, owner string, blockNumber *big.Int) (*big.Int, error) {
@@ -205,6 +207,36 @@ func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int, blockNumber *big
 	}
 
 	results, err := ins.Unpack("exists", bz)
+	if err != nil {
+		return false, err
+	}
+
+	return results[0].(bool), nil
+}
+
+func (cli *ETHCli) ORC721SupportsInterface(token string, blockNumber *big.Int) (bool, error) {
+	ins, err := abi.JSON(strings.NewReader(customERC721SupportsInterface))
+	if err != nil {
+		return false, err
+	}
+	const _InterfaceId_ERC721 = "0x80ac58cd"
+	interfaceIdBz, _ := hexutil.Decode(_InterfaceId_ERC721)
+	var bs [4]byte
+	copy(bs[:], interfaceIdBz)
+	data, err := ins.Pack("supportsInterface", bs)
+	if err != nil {
+		return false, err
+	}
+	contract := common.HexToAddress(token)
+	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
+		To:   &contract,
+		Data: data,
+	}, blockNumber)
+	if err != nil {
+		return false, err
+	}
+
+	results, err := ins.Unpack("supportsInterface", bz)
 	if err != nil {
 		return false, err
 	}
