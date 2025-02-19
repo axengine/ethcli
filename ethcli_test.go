@@ -3,20 +3,20 @@ package ethcli
 import (
 	"context"
 	"fmt"
-	"github.com/axengine/ethcli/eth/types"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"math/big"
 	"strings"
 	"testing"
 )
 
 var (
-	exampleRawHTTPUrl  = "https://testnet-web3.wolot.io"
+	exampleRawHTTPUrl  = "https://sepolia.infura.io/v3/74dda2fdd3404d4ea27fe6077804737d"
 	exampleRawWSUrl    = "ws://127.0.0.1:8546"
 	exampleERC20Token  = "0x67EbBA731DCd5b763F5699650920a637eDbBEb93"
-	exampleFromAddress = "0xED62EcAa9f0A43a92eA8ad08F199DF88Fc582F44"
+	exampleFromAddress = "0x94589228018529732f4971Dc98A781D5B0755B47"
 	exampleFromKey     = "1259fe6a12097aa514d595dbc4a659d97d3fce7ae27d355c59117aa91c699c15"
 	exampleToAddress   = "0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F"
 
@@ -44,7 +44,7 @@ func Test_BlockByHash(t *testing.T) {
 
 func Test_BlockByNumber(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.BlockByNumber(context.Background(), big.NewInt(1111057))
+	result, err := cli.BlockByNumber(context.Background(), big.NewInt(7432275))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,8 @@ func Test_HeaderByNumber(t *testing.T) {
 
 func Test_TransactionByHash(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, pending, err := cli.TransactionByHash(context.Background(), common.HexToHash("0x0f195566d383b3ee9174f0ea529bc604cb3e2d10bce8326c0a7eb05d2d347708"))
+	result, pending, err := cli.TransactionByHash(context.Background(),
+		common.HexToHash("0x32cfb08484a1711cf655e517a6f559ee9b0c104519b926a3d6732476911c841b"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,7 +113,7 @@ func Test_TransactionInBlock(t *testing.T) {
 
 func Test_TransactionReceipt(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.TransactionReceipt(context.Background(), common.HexToHash("0xb3cd375f353433709221b78f58dcd8d474bc1176adf40cb1785021857f176c12"))
+	result, err := cli.TransactionReceipt(context.Background(), common.HexToHash("0x8435396329d2f5992a4d9c6a7260e87cf4c2fbbe42025d8278bbcabb3efcd948"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -187,7 +188,7 @@ func Test_CodeAt(t *testing.T) {
 
 func Test_NonceAt(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.NonceAt(context.Background(), common.HexToAddress(exampleFromAddress), big.NewInt(9866995))
+	result, err := cli.NonceAt(context.Background(), common.HexToAddress(exampleFromAddress), nil)
 	if err != nil {
 		t.Fatal(err)
 	}

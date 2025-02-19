@@ -3,9 +3,10 @@ package ethcli
 import (
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/common"
 	"math/big"
 	"testing"
+
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func TestETHCli_SendOfflineTransaction(t *testing.T) {
@@ -17,13 +18,13 @@ func TestETHCli_SendOfflineTransaction(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Println("nonce=", nonce)
-	tx := cli.BuildTx(nonce,
+	tx := cli.BuildLegacyTx(nonce,
 		ToWei(big.NewInt(100)),
 		21000,
 		&to,
-		ToWei(big.NewInt(11*1e7)), // 1.1 OLO
+		ToWei(big.NewInt(11*1e7)), // 1.1 ether
 		nil)
-	signedtx, err := cli.SignTx(tx, exampleFromKey)
+	signedtx, err := cli.SignLegacyTx(tx, exampleFromKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,14 +35,14 @@ func TestETHCli_SendOfflineTransaction(t *testing.T) {
 	}
 }
 
-func TestETHCli_SendMondoTx(t *testing.T) {
+func TestETHCli_SendLegacyTx(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
 	to := exampleToAddress
-	hash, err := cli.SendMondoTx(exampleFromKey,
+	hash, err := cli.SendLegacyTx(exampleFromKey,
 		&to,
-		ToWei(big.NewInt(1)).String(), //0.00000001 OLO
+		ToWei(big.NewInt(1)).String(), //0.00000001 ether
 		"",
-		ToWei(big.NewInt(100)).String(), // 0.000001 OLO
+		ToWei(big.NewInt(100)).String(), // 0.000001 ether
 		21000)
 	if err != nil {
 		t.Fatal(err, hash)
@@ -49,12 +50,12 @@ func TestETHCli_SendMondoTx(t *testing.T) {
 	fmt.Println("hash=", hash)
 }
 
-func TestETHCli_SendMondoTxWithoutFee(t *testing.T) {
+func TestETHCli_SendLegacyTxWithoutFee(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
 	to := exampleToAddress
-	hash, err := cli.SendMondoTx(exampleFromKey,
+	hash, err := cli.SendLegacyTx(exampleFromKey,
 		&to,
-		ToWei(big.NewInt(1)).String(), //0.00000001 OLO
+		ToWei(big.NewInt(1)).String(), //0.00000001 ether
 		"",
 		"",
 		0)

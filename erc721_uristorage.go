@@ -2,20 +2,21 @@ package ethcli
 
 import (
 	"context"
+	"math/big"
+	"strings"
+
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"math/big"
-	"strings"
 )
 
 var (
 	openzeppelinERC721URIStorageAbi = `[{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}]`
 )
 
-// ORC721TokenURI
+// ERC721TokenURI
 // for ERC721Metadata && ERC721URIStorage
-func (cli *ETHCli) ORC721TokenURI(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
+func (cli *EvmClient) ERC721TokenURI(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721URIStorageAbi))
 	if err != nil {
 		return "", err

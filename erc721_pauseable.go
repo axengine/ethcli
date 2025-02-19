@@ -2,36 +2,37 @@ package ethcli
 
 import (
 	"context"
+	"math/big"
+	"strings"
+
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"math/big"
-	"strings"
 )
 
 var (
 	openzeppelinERC721PauseableAbi = `[{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]`
 )
 
-func (cli *ETHCli) ORC721Pause(token string, key string) (string, error) {
+func (cli *EvmClient) ERC721Pause(token string, key string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("pause")
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Unpause(token string, key string) (string, error) {
+func (cli *EvmClient) ERC721Unpause(token string, key string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("unpause")
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Paused(token string, blockNumber *big.Int) (bool, error) {
+func (cli *EvmClient) ERC721Paused(token string, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
 	if err != nil {
 		return false, err

@@ -2,12 +2,13 @@ package ethcli
 
 import (
 	"context"
+	"math/big"
+	"strings"
+
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"math/big"
-	"strings"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 	customERC721SupportsInterface     = `[{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]`
 )
 
-func (cli *ETHCli) ORC721BalanceOf(token string, owner string, blockNumber *big.Int) (*big.Int, error) {
+func (cli *EvmClient) ERC721BalanceOf(token string, owner string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func (cli *ETHCli) ORC721BalanceOf(token string, owner string, blockNumber *big.
 	return results[0].(*big.Int), nil
 }
 
-func (cli *ETHCli) ORC721OwnerOf(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
+func (cli *EvmClient) ERC721OwnerOf(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
@@ -67,34 +68,34 @@ func (cli *ETHCli) ORC721OwnerOf(token string, tokenId *big.Int, blockNumber *bi
 	return results[0].(common.Address).Hex(), nil
 }
 
-func (cli *ETHCli) ORC721SafeTransferFrom(token string, key, from, to string, tokenId *big.Int) (string, error) {
+func (cli *EvmClient) ERC721SafeTransferFrom(token string, key, from, to string, tokenId *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("safeTransferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721TransferFrom(token string, key, from, to string, tokenId *big.Int) (string, error) {
+func (cli *EvmClient) ERC721TransferFrom(token string, key, from, to string, tokenId *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("transferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Approve(token string, key, to string, tokenId *big.Int) (string, error) {
+func (cli *EvmClient) ERC721Approve(token string, key, to string, tokenId *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("approve", common.HexToAddress(to), tokenId)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721GetApproved(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
+func (cli *EvmClient) ERC721GetApproved(token string, tokenId *big.Int, blockNumber *big.Int) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
@@ -118,16 +119,16 @@ func (cli *ETHCli) ORC721GetApproved(token string, tokenId *big.Int, blockNumber
 	return results[0].(common.Address).Hex(), nil
 }
 
-func (cli *ETHCli) ORC721SetApprovalForAll(token string, key, operator string, approved bool) (string, error) {
+func (cli *EvmClient) ERC721SetApprovalForAll(token string, key, operator string, approved bool) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("setApprovalForAll", common.HexToAddress(operator), approved)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721IsApprovedForAll(token string, owner, operator string, blockNumber *big.Int) (bool, error) {
+func (cli *EvmClient) ERC721IsApprovedForAll(token string, owner, operator string, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return false, err
@@ -151,34 +152,34 @@ func (cli *ETHCli) ORC721IsApprovedForAll(token string, owner, operator string, 
 	return results[0].(bool), nil
 }
 
-func (cli *ETHCli) ORC721SafeTransferFromWithData(token string, key, from, to string, tokenId *big.Int, calldata []byte) (string, error) {
+func (cli *EvmClient) ERC721SafeTransferFromWithData(token string, key, from, to string, tokenId *big.Int, calldata []byte) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("safeTransferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId, calldata)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Mint(token string, key string, to string) (string, error) {
+func (cli *EvmClient) ERC721Mint(token string, key string, to string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721Mint))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("mint", common.HexToAddress(to))
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721MintWithTokenURI(token string, key string, to string, uri string) (string, error) {
+func (cli *EvmClient) ERC721MintWithTokenURI(token string, key string, to string, uri string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721MintWithURI))
 	if err != nil {
 		return "", err
 	}
 	data, _ := ins.Pack("mint", common.HexToAddress(to), uri)
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721MintWithTokenIdAndURI(token string, key string, to string, tokenId *big.Int, uri string) (string, error) {
+func (cli *EvmClient) ERC721MintWithTokenIdAndURI(token string, key string, to string, tokenId *big.Int, uri string) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721MintWithTokenIdAndURI))
 	if err != nil {
 		return "", err
@@ -187,10 +188,10 @@ func (cli *ETHCli) ORC721MintWithTokenIdAndURI(token string, key string, to stri
 	if err != nil {
 		return "", err
 	}
-	return cli.SendMondoTx(key, &token, "0", BytesToHex(data), "0", 0)
+	return cli.SendLegacyTx(key, &token, "0", BytesToHex(data), "0", 0)
 }
 
-func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int, blockNumber *big.Int) (bool, error) {
+func (cli *EvmClient) ERC721Exists(token string, tokenId *big.Int, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721Exists))
 	if err != nil {
 		return false, err
@@ -214,7 +215,7 @@ func (cli *ETHCli) ORC721Exists(token string, tokenId *big.Int, blockNumber *big
 	return results[0].(bool), nil
 }
 
-func (cli *ETHCli) ORC721SupportsInterface(token string, blockNumber *big.Int) (bool, error) {
+func (cli *EvmClient) ERC721SupportsInterface(token string, blockNumber *big.Int) (bool, error) {
 	ins, err := abi.JSON(strings.NewReader(customERC721SupportsInterface))
 	if err != nil {
 		return false, err

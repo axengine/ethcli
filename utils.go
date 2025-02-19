@@ -2,14 +2,15 @@ package ethcli
 
 import (
 	"encoding/hex"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"math/big"
 	"strings"
+
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
-// GenKey 本地生成mondo链格式的账户
-// 返回：公钥，地址，私钥，mondo采用压缩公钥
+// GenKey
+// return pk,address,sk
 func GenKey() (string, string, string, error) {
 	privkey, err := crypto.GenerateKey()
 	if err != nil {

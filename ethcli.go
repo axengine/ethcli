@@ -2,28 +2,29 @@ package ethcli
 
 import (
 	"context"
-	"github.com/axengine/ethcli/eth/ethclient"
 	"math/big"
 	"sync/atomic"
+
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-type ETHCli struct {
+type EvmClient struct {
 	*ethclient.Client
 
 	_chainID atomic.Value
 }
 
-func New(rawurl string) (*ETHCli, error) {
+func New(rawurl string) (*EvmClient, error) {
 	client, err := ethclient.Dial(rawurl)
 	if err != nil {
 		return nil, err
 	}
-	return &ETHCli{
+	return &EvmClient{
 		Client: client,
 	}, nil
 }
 
-func (cli *ETHCli) chainID() (*big.Int, error) {
+func (cli *EvmClient) chainID() (*big.Int, error) {
 	chainID := cli._chainID.Load()
 	if chainID != nil {
 		return chainID.(*big.Int), nil
@@ -38,7 +39,7 @@ func (cli *ETHCli) chainID() (*big.Int, error) {
 }
 
 // ID return chainId
-func (cli *ETHCli) ID() *big.Int {
+func (cli *EvmClient) ID() *big.Int {
 	id, err := cli.chainID()
 	if err != nil {
 		return big.NewInt(0)
