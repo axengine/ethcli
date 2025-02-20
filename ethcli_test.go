@@ -15,10 +15,10 @@ import (
 var (
 	exampleRawHTTPUrl  = "https://sepolia.infura.io/v3/74dda2fdd3404d4ea27fe6077804737d"
 	exampleRawWSUrl    = "ws://127.0.0.1:8546"
-	exampleERC20Token  = "0x67EbBA731DCd5b763F5699650920a637eDbBEb93"
-	exampleFromAddress = "0x94589228018529732f4971Dc98A781D5B0755B47"
-	exampleFromKey     = "1259fe6a12097aa514d595dbc4a659d97d3fce7ae27d355c59117aa91c699c15"
-	exampleToAddress   = "0x0F508F143E77b39F8e20DD9d2C1e515f0f527D9F"
+	exampleERC20Token  = "0xF557617506209564168E494E67B3E686c560397A"
+	exampleFromAddress = "0x980fcd34d8cF84AA16462c36D1fCa4920c04e7F9"
+	exampleFromKey     = "a75208cc60307aa44e8abdc631cdffb43c3bfb70ea7a6155f4f21ae87efb87bc"
+	exampleToAddress   = "0x980fcd34d8cF84AA16462c36D1fCa4920c04e7F9"
 
 	exampleERC721Token     = "0x2A8eb9802a7d692128E2EDbfBcda2E71DCd74c01"
 	exampleERC721IssuerKey = "f344a979b0005827300a64bcae1c0a24c3539770b1b2a971d83c08899bec013a"

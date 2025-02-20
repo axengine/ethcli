@@ -14,7 +14,7 @@ var (
 	openzeppelinERC721EnumerableAbi = `[{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]`
 )
 
-func (cli *EvmClient) ERC721TokenOfOwnerByIndex(token string, owner string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
+func (cli *EvmClient) ERC721TokenOfOwnerByIndex(ctx context.Context, token string, owner string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (cli *EvmClient) ERC721TokenOfOwnerByIndex(token string, owner string, inde
 	data, _ := ins.Pack("tokenOfOwnerByIndex", common.HexToAddress(owner), index)
 
 	contract := common.HexToAddress(token)
-	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
+	bz, err := cli.CallContract(ctx, ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
 	}, blockNumber)
@@ -38,7 +38,7 @@ func (cli *EvmClient) ERC721TokenOfOwnerByIndex(token string, owner string, inde
 	return results[0].(*big.Int), nil
 }
 
-func (cli *EvmClient) ERC721TotalSupply(token string, blockNumber *big.Int) (*big.Int, error) {
+func (cli *EvmClient) ERC721TotalSupply(ctx context.Context, token string, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (cli *EvmClient) ERC721TotalSupply(token string, blockNumber *big.Int) (*bi
 	data, _ := ins.Pack("totalSupply")
 
 	contract := common.HexToAddress(token)
-	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
+	bz, err := cli.CallContract(ctx, ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
 	}, blockNumber)
@@ -62,7 +62,7 @@ func (cli *EvmClient) ERC721TotalSupply(token string, blockNumber *big.Int) (*bi
 	return results[0].(*big.Int), nil
 }
 
-func (cli *EvmClient) ERC721TokenByIndex(token string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
+func (cli *EvmClient) ERC721TokenByIndex(ctx context.Context, token string, index *big.Int, blockNumber *big.Int) (*big.Int, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721EnumerableAbi))
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (cli *EvmClient) ERC721TokenByIndex(token string, index *big.Int, blockNumb
 	data, _ := ins.Pack("tokenByIndex", index)
 
 	contract := common.HexToAddress(token)
-	bz, err := cli.CallContract(context.Background(), ethereum.CallMsg{
+	bz, err := cli.CallContract(ctx, ethereum.CallMsg{
 		To:   &contract,
 		Data: data,
 	}, blockNumber)

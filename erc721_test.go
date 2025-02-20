@@ -14,7 +14,7 @@ import (
 
 func TestETHCli_ERC721MintWithTokenURI(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721MintWithTokenURI(exampleERC721Token, exampleERC721IssuerKey, exampleFromAddress, "1001,0,1001")
+	result, err := cli.ERC721MintWithTokenURI(context.Background(), exampleERC721Token, exampleERC721IssuerKey, exampleFromAddress, "1001,0,1001")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,7 +68,7 @@ func hashToBigInt(hx common.Hash) *big.Int {
 
 func TestETHCli_ERC721Burn(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Burn(exampleERC721Token, exampleFromKey, big.NewInt(67))
+	result, err := cli.ERC721Burn(context.Background(), exampleERC721Token, exampleFromKey, big.NewInt(67))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestETHCli_ERC721Burn(t *testing.T) {
 
 func TestETHCli_ERC721BalanceOf(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721BalanceOf("0x0c6F5145390028B7d09b513f47893b10C4c3a457", "0x69cB74cB86A05bd36d53Ccef1af3e90a6C66dD30", nil)
+	result, err := cli.ERC721BalanceOf(context.Background(), "0x0c6F5145390028B7d09b513f47893b10C4c3a457", "0x69cB74cB86A05bd36d53Ccef1af3e90a6C66dD30", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +86,7 @@ func TestETHCli_ERC721BalanceOf(t *testing.T) {
 
 func TestETHCli_ERC721OwnerOf(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721OwnerOf(exampleERC721Token, big.NewInt(71), nil)
+	result, err := cli.ERC721OwnerOf(context.Background(), exampleERC721Token, big.NewInt(71), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -95,7 +95,7 @@ func TestETHCli_ERC721OwnerOf(t *testing.T) {
 
 func TestETHCli_ERC721TokenOfOwnerByIndex(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721TokenOfOwnerByIndex(exampleERC721Token, exampleFromAddress, big.NewInt(0), nil)
+	result, err := cli.ERC721TokenOfOwnerByIndex(context.Background(), exampleERC721Token, exampleFromAddress, big.NewInt(0), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -104,7 +104,7 @@ func TestETHCli_ERC721TokenOfOwnerByIndex(t *testing.T) {
 
 func TestETHCli_ERC721TotalSupply(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721TotalSupply(exampleERC721Token, nil)
+	result, err := cli.ERC721TotalSupply(context.Background(), exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -113,7 +113,7 @@ func TestETHCli_ERC721TotalSupply(t *testing.T) {
 
 func TestETHCli_ERC721TokenByIndex(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721TokenByIndex(exampleERC721Token, big.NewInt(0), nil)
+	result, err := cli.ERC721TokenByIndex(context.Background(), exampleERC721Token, big.NewInt(0), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,7 +122,7 @@ func TestETHCli_ERC721TokenByIndex(t *testing.T) {
 
 func TestETHCli_ERC20Name(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC20Name(exampleERC721Token, nil)
+	result, err := cli.ERC20Name(context.Background(), exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -131,7 +131,7 @@ func TestETHCli_ERC20Name(t *testing.T) {
 
 func TestETHCli_ERC721Symbol(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Symbol(exampleERC721Token, nil)
+	result, err := cli.ERC721Symbol(context.Background(), exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -140,7 +140,7 @@ func TestETHCli_ERC721Symbol(t *testing.T) {
 
 func TestETHCli_ERC721TokenURI(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721TokenURI(exampleERC721Token, big.NewInt(66), nil)
+	result, err := cli.ERC721TokenURI(context.Background(), exampleERC721Token, big.NewInt(66), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,7 @@ func TestETHCli_ERC721TokenURI(t *testing.T) {
 
 func TestETHCli_ERC721Paused(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Paused(exampleERC721Token, nil)
+	result, err := cli.ERC721Paused(context.Background(), exampleERC721Token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -158,7 +158,7 @@ func TestETHCli_ERC721Paused(t *testing.T) {
 
 func TestETHCli_ERC721Pause(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Pause(exampleERC721Token, exampleERC721IssuerKey)
+	result, err := cli.ERC721Pause(context.Background(), exampleERC721Token, exampleERC721IssuerKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -167,7 +167,7 @@ func TestETHCli_ERC721Pause(t *testing.T) {
 
 func TestETHCli_ERC721Unpause(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Unpause(exampleERC721Token, exampleERC721IssuerKey)
+	result, err := cli.ERC721Unpause(context.Background(), exampleERC721Token, exampleERC721IssuerKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -176,7 +176,7 @@ func TestETHCli_ERC721Unpause(t *testing.T) {
 
 func TestETHCli_ERC721TransferFrom(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721TransferFrom(exampleERC721Token, exampleFromKey, exampleFromAddress, exampleToAddress, big.NewInt(69))
+	result, err := cli.ERC721TransferFrom(context.Background(), exampleERC721Token, exampleFromKey, exampleFromAddress, exampleToAddress, big.NewInt(69))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -185,7 +185,7 @@ func TestETHCli_ERC721TransferFrom(t *testing.T) {
 
 func TestETHCli_ERC721SafeTransferFrom(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721SafeTransferFrom(exampleERC721Token, exampleFromKey, exampleFromAddress, exampleERC721Token, big.NewInt(71))
+	result, err := cli.ERC721SafeTransferFrom(context.Background(), exampleERC721Token, exampleFromKey, exampleFromAddress, exampleERC721Token, big.NewInt(71))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -194,7 +194,7 @@ func TestETHCli_ERC721SafeTransferFrom(t *testing.T) {
 
 func TestETHCli_ERC721Approve(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721Approve(exampleERC721Token, exampleFromKey, exampleToAddress, big.NewInt(70))
+	result, err := cli.ERC721Approve(context.Background(), exampleERC721Token, exampleFromKey, exampleToAddress, big.NewInt(70))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -203,7 +203,7 @@ func TestETHCli_ERC721Approve(t *testing.T) {
 
 func TestETHCli_ERC721GetApproved(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721GetApproved(exampleERC721Token, big.NewInt(70), nil)
+	result, err := cli.ERC721GetApproved(context.Background(), exampleERC721Token, big.NewInt(70), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,7 +212,7 @@ func TestETHCli_ERC721GetApproved(t *testing.T) {
 
 func TestETHCli_ERC721SetApprovalForAll(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721SetApprovalForAll(exampleERC721Token, exampleFromKey, exampleToAddress, true)
+	result, err := cli.ERC721SetApprovalForAll(context.Background(), exampleERC721Token, exampleFromKey, exampleToAddress, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -221,7 +221,7 @@ func TestETHCli_ERC721SetApprovalForAll(t *testing.T) {
 
 func TestETHCli_ERC721IsApprovedForAll(t *testing.T) {
 	cli, _ := New(exampleRawHTTPUrl)
-	result, err := cli.ERC721IsApprovedForAll(exampleERC721Token, exampleFromAddress, exampleToAddress, nil)
+	result, err := cli.ERC721IsApprovedForAll(context.Background(), exampleERC721Token, exampleFromAddress, exampleToAddress, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -230,7 +230,7 @@ func TestETHCli_ERC721IsApprovedForAll(t *testing.T) {
 
 func TestETHCli_ERC721Supports(t *testing.T) {
 	cli, _ := New("https://bsc-dataseed1.binance.org:443")
-	result, err := cli.ERC721SupportsInterface("0x6D07C33ad397d73Cbd3fE5349eF223ed36FE5b28", nil)
+	result, err := cli.ERC721SupportsInterface(context.Background(), "0x6D07C33ad397d73Cbd3fE5349eF223ed36FE5b28", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
