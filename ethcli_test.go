@@ -3,13 +3,14 @@ package ethcli
 import (
 	"context"
 	"fmt"
+	"math/big"
+	"strings"
+	"testing"
+
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"math/big"
-	"strings"
-	"testing"
 )
 
 var (
@@ -26,11 +27,14 @@ var (
 
 func Test_ChainID(t *testing.T) {
 	cli, err := New(exampleRawHTTPUrl)
+	if err != nil {
+		t.Fatal(err)
+	}
 	result, err := cli.ChainID(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("%+v\n", result)
+	fmt.Printf("%v\n", result)
 }
 
 func Test_BlockByHash(t *testing.T) {
@@ -132,7 +136,10 @@ func Test_SyncProgress(t *testing.T) {
 
 // notifications not supported
 func Test_SubscribeNewHead(t *testing.T) {
-	cli, _ := New(exampleRawWSUrl)
+	cli, err := New(exampleRawWSUrl)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	ch := make(chan *types.Header, 1)
 

@@ -18,10 +18,6 @@ func New(rawurl string) (*EvmClient, error) {
 	}, nil
 }
 
-//func (cli *EvmClient) ChainID(ctx context.Context) (*big.Int, error) {
-//	id, err := cli.ChainID(ctx)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return id, nil
-//}
+func (p *EvmClient) RPCClient() *ethclient.Client {
+	return p.Client
+}
