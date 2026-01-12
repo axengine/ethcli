@@ -42,20 +42,8 @@ func BuildDynamicFeeTx(chainId *big.Int, nonce uint64, baseFee, priorityFee *big
 	return types.NewTx(dynamicFeeTx)
 }
 
-// SignTx sign transaction
-func SignTx(ctx context.Context, cli *ethclient.Client, tx *types.Transaction, key string) (*types.Transaction, error) {
-	priKey, err := crypto.HexToECDSA(key)
-	if err != nil {
-		return nil, err
-	}
-	chainId, err := cli.ChainID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return signTx(tx, chainId, priKey)
-}
-
-func signTx(tx *types.Transaction, chainId *big.Int, key *ecdsa.PrivateKey) (*types.Transaction, error) {
+// SignTx signs a transaction with the given private key.
+func SignTx(tx *types.Transaction, chainId *big.Int, key *ecdsa.PrivateKey) (*types.Transaction, error) {
 	signer := types.LatestSignerForChainID(chainId)
 	signature, err := crypto.Sign(signer.Hash(tx).Bytes(), key)
 	if err != nil {
@@ -123,7 +111,11 @@ func SendLegacyTx(ctx context.Context, cli *ethclient.Client, key string, to *st
 
 	tx := BuildLegacyTx(nonce, price, gasLimit, toAddr, value, data)
 
-	signedTx, err := SignTx(ctx, cli, tx, key)
+	chainId, err := cli.ChainID(ctx)
+	if err != nil {
+		return "", err
+	}
+	signedTx, err := SignTx(tx, chainId, priKey)
 	if err != nil {
 		return "", err
 	}
@@ -186,7 +178,7 @@ func SendDynamicFeeTx(ctx context.Context, cli *ethclient.Client, key string, to
 	}
 	tx := BuildDynamicFeeTx(chainId, nonce, baseFee, priorityFeePerGas, gas, toAddr, value, data)
 
-	signedTx, err := SignTx(ctx, cli, tx, key)
+	signedTx, err := SignTx(tx, chainId, priKey)
 	if err != nil {
 		return "", err
 	}

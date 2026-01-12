@@ -199,3 +199,39 @@ func ERC20Approve(ctx context.Context, cli *ethclient.Client, token, key, spende
 
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(data), "0", 0)
 }
+
+func ERC20TransferData(to, value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("transfer", common.HexToAddress(to), amount)
+}
+
+func ERC20TransferFromData(from, to, value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("transferFrom", common.HexToAddress(from), common.HexToAddress(to), amount)
+}
+
+func ERC20ApproveData(spender, value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20Abi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("approve", common.HexToAddress(spender), amount)
+}

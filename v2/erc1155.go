@@ -91,13 +91,13 @@ func ERC1155IsApprovedForAll(ctx context.Context, cli *ethclient.Client, token s
 	return results[0].(bool), nil
 }
 
-func ERC1155SafeBatchTransferFrom(ctx context.Context, cli *ethclient.Client, key string, token string, owner string, to string, ids []*big.Int, amounts []*big.Int) (string, error) {
+func ERC1155SafeBatchTransferFrom(ctx context.Context, cli *ethclient.Client, key string, token string, owner string, to string, ids []*big.Int, amounts []*big.Int, data []byte) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
 	if err != nil {
 		return "", err
 	}
-	data, _ := ins.Pack("safeBatchTransferFrom", common.HexToAddress(owner), common.HexToAddress(to), ids, amounts)
-	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(data), "0", 0)
+	bz, _ := ins.Pack("safeBatchTransferFrom", common.HexToAddress(owner), common.HexToAddress(to), ids, amounts, data)
+	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(bz), "0", 0)
 }
 
 func ERC1155SafeTransferFrom(ctx context.Context, cli *ethclient.Client, key string, token string, owner string, to string, id *big.Int, amount *big.Int, data []byte) (string, error) {
@@ -109,12 +109,12 @@ func ERC1155SafeTransferFrom(ctx context.Context, cli *ethclient.Client, key str
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(bz), "0", 0)
 }
 
-func ERC1155SetApprovalForAll(ctx context.Context, cli *ethclient.Client, key string, token string, owner string, operator string, id *big.Int) (string, error) {
+func ERC1155SetApprovalForAll(ctx context.Context, cli *ethclient.Client, key string, token string, operator string, approved bool) (string, error) {
 	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
 	if err != nil {
 		return "", err
 	}
-	bz, _ := ins.Pack("setApprovalForAll", common.HexToAddress(owner), common.HexToAddress(operator), id)
+	bz, _ := ins.Pack("setApprovalForAll", common.HexToAddress(operator), approved)
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(bz), "0", 0)
 }
 
@@ -200,4 +200,60 @@ func ERC1155BurnBatch(ctx context.Context, cli *ethclient.Client, key string, to
 	}
 	bz, _ := ins.Pack("burnBatch", common.HexToAddress(to), ids, amounts)
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(bz), "0", 0)
+}
+
+func ERC1155SafeBatchTransferFromData(from, to string, ids []*big.Int, amounts []*big.Int, data []byte) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("safeBatchTransferFrom", common.HexToAddress(from), common.HexToAddress(to), ids, amounts, data)
+}
+
+func ERC1155SafeTransferFromData(from, to string, id *big.Int, amount *big.Int, data []byte) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("safeTransferFrom", common.HexToAddress(from), common.HexToAddress(to), id, amount, data)
+}
+
+func ERC1155SetApprovalForAllData(operator string, approved bool) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("setApprovalForAll", common.HexToAddress(operator), approved)
+}
+
+func ERC1155MintData(to string, id *big.Int, amount *big.Int, data []byte) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("mint", common.HexToAddress(to), id, amount, data)
+}
+
+func ERC1155MintBatchData(to string, ids []*big.Int, amounts []*big.Int, data []byte) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("mintBatch", common.HexToAddress(to), ids, amounts, data)
+}
+
+func ERC1155BurnData(from string, id *big.Int, amount *big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("burn", common.HexToAddress(from), id, amount)
+}
+
+func ERC1155BurnBatchData(from string, ids []*big.Int, amounts []*big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC1155Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("burnBatch", common.HexToAddress(from), ids, amounts)
 }

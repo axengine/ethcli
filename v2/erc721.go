@@ -245,3 +245,67 @@ func ERC721SupportsInterface(ctx context.Context, cli *ethclient.Client, token s
 
 	return results[0].(bool), nil
 }
+
+func ERC721SafeTransferFromData(from, to string, tokenId *big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("safeTransferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId)
+}
+
+func ERC721TransferFromData(from, to string, tokenId *big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("transferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId)
+}
+
+func ERC721ApproveData(to string, tokenId *big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("approve", common.HexToAddress(to), tokenId)
+}
+
+func ERC721SetApprovalForAllData(operator string, approved bool) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("setApprovalForAll", common.HexToAddress(operator), approved)
+}
+
+func ERC721SafeTransferFromWithDataData(from, to string, tokenId *big.Int, calldata []byte) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinIERC721Abi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("safeTransferFrom", common.HexToAddress(from), common.HexToAddress(to), tokenId, calldata)
+}
+
+func ERC721MintData(to string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(customERC721Mint))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("mint", common.HexToAddress(to))
+}
+
+func ERC721MintWithTokenURIData(to string, uri string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(customERC721MintWithURI))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("mint", common.HexToAddress(to), uri)
+}
+
+func ERC721MintWithTokenIdAndURIData(to string, tokenId *big.Int, uri string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(customERC721MintWithTokenIdAndURI))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("mint", common.HexToAddress(to), tokenId, uri)
+}

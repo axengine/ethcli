@@ -56,3 +56,19 @@ func ERC721Paused(ctx context.Context, cli *ethclient.Client, token string, bloc
 
 	return results[0].(bool), nil
 }
+
+func ERC721PauseData() ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("pause")
+}
+
+func ERC721UnpauseData() ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721PauseableAbi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("unpause")
+}

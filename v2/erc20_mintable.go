@@ -54,3 +54,39 @@ func ERC20BurnFrom(ctx context.Context, cli *ethclient.Client, token, key, owner
 
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(data), "0", 0)
 }
+
+func ERC20MintData(to, value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20MintBurnAbleAbi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("mint", common.HexToAddress(to), amount)
+}
+
+func ERC20BurnData(value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20MintBurnAbleAbi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("burn", amount)
+}
+
+func ERC20BurnFromData(owner, value string) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC20MintBurnAbleAbi))
+	if err != nil {
+		return nil, err
+	}
+	amount, ok := new(big.Int).SetString(value, 10)
+	if !ok {
+		return nil, errors.New("invalid value:" + value)
+	}
+	return ins.Pack("burnFrom", common.HexToAddress(owner), amount)
+}

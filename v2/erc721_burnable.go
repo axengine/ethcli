@@ -21,3 +21,11 @@ func ERC721Burn(ctx context.Context, cli *ethclient.Client, token string, key st
 	data, _ := ins.Pack("burn", tokenId)
 	return SendLegacyTx(ctx, cli, key, &token, "0", BytesToHex(data), "0", 0)
 }
+
+func ERC721BurnData(tokenId *big.Int) ([]byte, error) {
+	ins, err := abi.JSON(strings.NewReader(openzeppelinERC721BurnableAbi))
+	if err != nil {
+		return nil, err
+	}
+	return ins.Pack("burn", tokenId)
+}
